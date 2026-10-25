@@ -45,7 +45,6 @@ The workflow processes road incident records, filters alerts, prepares a summary
 Shows the n8n workflow and the connections between its nodes.
 
 ![Workflow Overview]([screenshots/workflow-overview.png](https://github.com/Savindi-Rathnayaka/Smart-Road-Alert-Automation/blob/main/Screenshot%202026-10-25%20184835.png))
-![Workflow Overview]([screenshots/workflow-overview.png](https://github.com/Savindi-Rathnayaka/Smart-Road-Alert-Automation/blob/main/Screenshot%202026-10-25%20184835.png))
 
 ### 2. Telegram Alert Notification
 
