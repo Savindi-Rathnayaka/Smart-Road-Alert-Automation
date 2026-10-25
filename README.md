@@ -105,6 +105,7 @@ Automatic execution depends on the workflow being published and the n8n instance
 ## 👩‍💻 Author
 
 **Savindi Rathnayaka**
+(https://savindirathnayaka.app.n8n.cloud/assistant/ccf384fd-794e-4b0a-a12e-ab7ed3510a12)
 
 Data Science Undergraduate | Interested in Data Analytics, Python, and Automation
 
