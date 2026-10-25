@@ -45,18 +45,13 @@ The workflow processes road incident records, filters alerts, prepares a summary
 Shows the n8n workflow and the connections between its nodes.
 
 ![Workflow Overview](https://github.com/Savindi-Rathnayaka/Smart-Road-Alert-Automation/blob/main/Screenshot%202026-10-25%20184835.png)
-
+![Workflow Overview](https://github.com/Savindi-Rathnayaka/Smart-Road-Alert-Automation/blob/main/Screenshot%202026-10-25%20184954.png)
 ### 2. Telegram Alert Notification
 
 Example of the automated road incident alert message delivered to Telegram.
 
 ![Telegram Alert](https://github.com/Savindi-Rathnayaka/Smart-Road-Alert-Automation/blob/main/Screenshot%202026-10-25%20185126.png)
 
-### 3. Google Sheets Alert Records
-
-Shows the Google Sheets integration used to manage alert records.
-
-![Google Sheets](screenshots/google-sheets.png)
 
 ## 📊 Sample Dataset
 
