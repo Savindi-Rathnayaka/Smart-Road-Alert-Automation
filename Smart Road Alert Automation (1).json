@@ -1,0 +1,430 @@
+{
+  "name": "Smart Road Alert Automation",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "21f48e42-dfee-497f-ab51-ab7087cbba85",
+      "name": "When clicking ‘Execute workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "smart_road_alert_results.csv",
+        "filter": {},
+        "options": {}
+      },
+      "id": "0a7f82fd-ab9a-4fd5-b79c-b4a2d0a0567d",
+      "name": "Search files and folders",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        224,
+        0
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "rjDABMpqB4KbnUxg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1BocQ6ddVYOsmMVE1ZMVUcnP9b2imXeeJ",
+          "mode": "list",
+          "cachedResultName": "smart_road_alert_results.csv",
+          "cachedResultUrl": "https://drive.google.com/file/d/1BocQ6ddVYOsmMVE1ZMVUcnP9b2imXeeJ/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "id": "06dc8216-e093-415d-b3b2-45587bf4b48d",
+      "name": "Download file",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        448,
+        0
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "rjDABMpqB4KbnUxg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "dfb9882d-ec0c-4a20-8fc0-c889297d0e33",
+      "name": "Extract from File",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "58c0b37c-4507-4936-b618-8bf06a8cd67d",
+              "leftValue": "={{$json.smart_alert_level}}",
+              "rightValue": "HIGH",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3b6439cd-8dc1-4bb0-8fd4-7b02db0d5b13",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        336,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "15PDvp3CaYjl2ZIR09C5OHXX7CVXl29Vb0PQQ2CSUH88",
+          "mode": "list",
+          "cachedResultName": "Sent_Alerts_Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15PDvp3CaYjl2ZIR09C5OHXX7CVXl29Vb0PQQ2CSUH88/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15PDvp3CaYjl2ZIR09C5OHXX7CVXl29Vb0PQQ2CSUH88/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "id": "2432bf9e-2ce7-40fe-9347-29a3ee681451",
+      "name": "Get row(s) in sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        608,
+        256
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QIz9ey1SmxD0P8rN",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('If').all().map(item => item.json);\n\nconst seen = new Set();\nconst out = [];\n\nfor (const a of items) {\n  const id = String(a.incident_id || '').trim();\n\n  if (!id || seen.has(id)) continue;\n\n  seen.add(id);\n\n  out.push({\n    json: {\n      ...a,\n      alert_id: id\n    }\n  });\n}\n\nreturn out;"
+      },
+      "id": "65dd2b4b-6b6c-4de4-baa0-d76637c4c229",
+      "name": "Code in JavaScript",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        256
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "15PDvp3CaYjl2ZIR09C5OHXX7CVXl29Vb0PQQ2CSUH88",
+          "mode": "list",
+          "cachedResultName": "Sent_Alerts_Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15PDvp3CaYjl2ZIR09C5OHXX7CVXl29Vb0PQQ2CSUH88/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15PDvp3CaYjl2ZIR09C5OHXX7CVXl29Vb0PQQ2CSUH88/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "A": "={{$json.alert_id}}",
+            "B": "={{$json.location}}",
+            "C": "={{$json.incident_type}}",
+            "D": "={{$now}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "A",
+              "displayName": "A",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "B",
+              "displayName": "B",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "C",
+              "displayName": "C",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "D",
+              "displayName": "D",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "df83317d-8492-4221-8d6c-8a178fd63b8f",
+      "name": "Append row in sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1088,
+        352
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QIz9ey1SmxD0P8rN",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('Code in JavaScript').all().map(i => i.json);\n\nconst highAlerts = items.filter(i =>\nString(i.smart_alert_level || '').toUpperCase() === 'HIGH'\n);\n\nconst top = highAlerts.slice(0, 10);\n\nconst lines = top.map(i =>\n`• ${i.location} - ${i.incident_type} (${i.congestion_percent}% congestion, ${i.distance_ahead_km} km ahead)`\n);\n\nconst text =\n`🚨 SMART ROAD ALERT 🚨\\n` +\n`HIGH alerts: ${highAlerts.length}\\n\\n` +\n`Top ${top.length}:\\n` +\n`${lines.join('\\n')}\\n\\n` +\n`Please drive carefully!`;\n\nreturn [{ json: { text } }];\n\n"
+      },
+      "id": "14c7da5c-cbfe-40a8-86a2-d8712db10f76",
+      "name": "Build Alert Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "5717266349",
+        "text": "={{ $json.text }}",
+        "additionalFields": {}
+      },
+      "id": "dfdaebf2-9691-4510-a303-5bba123567d1",
+      "name": "Send a text message",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        752,
+        704
+      ],
+      "executeOnce": true,
+      "webhookId": "bfbb7db4-833d-4234-90a4-cf832952ca7d",
+      "credentials": {
+        "telegramApi": {
+          "id": "JEg8VqXeKskRSEJW",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -32,
+        -256
+      ],
+      "id": "7f21b13a-c204-4f89-92b4-3220648677d0",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Build Alert Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Alert Summary": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "5b3142a7-d93a-4c8f-bed1-975fcb4a7175",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "842a1c7c969c63ff1a0d9d0c3519258dfdb17bcebaad8166c33f480b3e3a7334"
+  },
+  "nodeGroups": [],
+  "id": "UMkDWVLGJDksAow6",
+  "tags": []
+}
