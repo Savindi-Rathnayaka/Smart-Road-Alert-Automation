@@ -46,6 +46,7 @@ Shows the n8n workflow and the connections between its nodes.
 
 ![Workflow Overview](https://github.com/Savindi-Rathnayaka/Smart-Road-Alert-Automation/blob/main/Screenshot%202026-10-25%20184835.png)
 ![Workflow Overview](https://github.com/Savindi-Rathnayaka/Smart-Road-Alert-Automation/blob/main/Screenshot%202026-10-25%20184954.png)
+![Workflow Overview](https://github.com/Savindi-Rathnayaka/Smart-Road-Alert-Automation/blob/main/Screenshot%202026-10-26%20182741.png)
 ### 2. Telegram Alert Notification
 
 Example of the automated road incident alert message delivered to Telegram.
